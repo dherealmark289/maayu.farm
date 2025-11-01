@@ -1,0 +1,127 @@
+/* UI/borders: reusable sign/border utilities */
+
+ :root{
+  --ui-sign-outer:#3e1f10;
+  --ui-sign-mid:#5a2e16;
+  --ui-sign-inner:#8b5e34;
+  --ui-sign-highlight:#d9a85b;
+}
+
+/* Stacked ring sign - consistent on all sides */
+.ui-sign{ position:relative; background:var(--panel); box-shadow:8px 8px 0 0 rgba(0,0,0,0.3), 12px 12px 0 0 rgba(0,0,0,0.15); }
+.ui-sign::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  border:4px solid var(--ui-sign-inner);
+  box-shadow:
+    0 0 0 4px var(--ui-sign-mid),
+    0 0 0 14px var(--ui-sign-inner),
+    inset 0 0 0 3px var(--ui-sign-mid),
+    inset 0 1px 0 rgba(0,0,0,0.08),        /* inner top shading for depth */
+    inset 0 -1px 0 rgba(255,255,255,0.08), /* inner bottom lift */
+    inset 2px 2px 0 rgba(0,0,0,0.16),      /* inner ring concave shadow (BR) */
+    inset -2px -2px 0 rgba(255,255,255,0.16), /* inner ring highlight (TL) */
+    inset 0 0 10px rgba(0,0,0,0.10),       /* soft internal shadow toward center */
+    -2px -2px 0 0 rgba(255,255,255,0.25),  /* top-left lift */
+    2px 2px 0 0 rgba(0,0,0,0.25),          /* bottom-right shadow */
+    -4px -4px 0 0 rgba(255,255,255,0.15),  /* extra rim highlight */
+    4px 4px 0 0 rgba(0,0,0,0.2);           /* deeper rim shadow */
+  z-index:1; /* render border rings above surface effects */
+}
+
+/* Utilities to disable base outlines on host elements */
+.ui-reset-outlines{ outline:0; }
+/* Hide only the base inner inset (::after) from menu-item when using ui-sign */
+.menu-item.ui-sign{ outline:4px solid #000; }
+/* Ensure the inner surface (::after) renders so grid/concave background is visible */
+.menu-item.ui-sign::after{ display:block; }
+
+/* Make ui-sign corners pixel-notched and keep border aligned */
+.ui-sign.notched-90{ clip-path: polygon(
+  8px 0,
+  calc(100% - 8px) 0,
+  100% 8px,
+  100% calc(100% - 8px),
+  calc(100% - 8px) 100%,
+  8px 100%,
+  0 calc(100% - 8px),
+  0 8px
+); }
+.ui-sign.notched-90::before{ clip-path: inherit; }
+.ui-sign.notched-90::after{ clip-path: inherit; }
+
+/* Alternative chamfered corners (45° cuts) */
+.ui-sign.chamfer-6{ clip-path: polygon(
+  6px 0,
+  calc(100% - 6px) 0,
+  100% 6px,
+  100% calc(100% - 6px),
+  calc(100% - 6px) 100%,
+  6px 100%,
+  0 calc(100% - 6px),
+  0 6px
+); }
+.ui-sign.chamfer-6::before{ clip-path: inherit; }
+.ui-sign.chamfer-6::after{ clip-path: inherit; }
+
+/* Inset, pressed 3D surface for the inside of the sign */
+.ui-sign::after{
+  content:"";
+  position:absolute;
+  inset:6px; /* tighter surface for compact buttons */
+  pointer-events:none;
+  display:block; /* override earlier display:none */
+  /* Subtle inward bevel: light on top/left, dark on bottom/right */
+  box-shadow:
+    inset 0 8px rgba(255,255,255,0.18),
+    inset 0 -8px rgba(0,0,0,0.18),
+    inset 8px 0 rgba(0,0,0,0.12),   /* left edge darker for concave */
+    inset -8px 0 rgba(0,0,0,0.16);  /* right edge darker for concave */
+  /* Gentle wood grain texture across the surface */
+  background:
+    /* Horizontal concave vignette: darker edges, lighter center */
+    linear-gradient(90deg,
+      rgba(0,0,0,0.16) 0 8px,
+      rgba(0,0,0,0.06) 8px 16px,
+      rgba(0,0,0,0.00) 24% 76%,
+      rgba(255,255,255,0.10) calc(100% - 16px) calc(100% - 8px),
+      rgba(255,255,255,0.14) calc(100% - 8px) 100%
+    ),
+    linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 78%, rgba(255,255,255,0.05) 100%), /* vignette top/bottom */
+    repeating-linear-gradient(90deg,
+      rgba(90,46,22,0.08) 0 2px,
+      rgba(90,46,22,0.03) 2px 4px,
+      rgba(0,0,0,0.00) 4px 8px
+    ), /* horizontal grain lines */
+    repeating-linear-gradient(0deg,
+      rgba(139,94,52,0.04) 0 1px,
+      rgba(0,0,0,0.00) 1px 3px
+    ), /* subtle vertical pores */
+    /* Pixelated grid overlay inside sign (extra light) */
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.025) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.025) 0 1px, transparent 1px 14px);
+  z-index:0; /* sit beneath border rings but above background */
+}
+.ui-sign.notched-90::after{ clip-path: inherit; }
+
+/* Ensure grid is clearly visible inside mobile hamburger menu */
+@media (max-width: 640px){
+  .mobile-menu .menu-item.ui-sign::after{
+    background:
+      linear-gradient(90deg,
+        rgba(0,0,0,0.16) 0 8px,
+        rgba(0,0,0,0.06) 8px 16px,
+        rgba(0,0,0,0.00) 24% 76%,
+        rgba(255,255,255,0.08) calc(100% - 16px) calc(100% - 8px),
+        rgba(255,255,255,0.12) calc(100% - 8px) 100%
+      ),
+      linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 78%, rgba(255,255,255,0.04) 100%),
+      repeating-linear-gradient(90deg, rgba(90,46,22,0.06) 0 2px, rgba(90,46,22,0.02) 2px 4px, rgba(0,0,0,0.00) 4px 8px),
+      repeating-linear-gradient(0deg, rgba(139,94,52,0.04) 0 1px, rgba(0,0,0,0.00) 1px 3px),
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0 1px, transparent 1px 12px),
+      repeating-linear-gradient(90deg, rgba(0,0,0,0.04) 0 1px, transparent 1px 12px);
+    image-rendering: pixelated;
+  }
+}
+.ui-sign.notched-90::after{ clip-path: inherit; }
+
+

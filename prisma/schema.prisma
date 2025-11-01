@@ -1,0 +1,312 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Users (admin panel users)
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      String?  @default("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("users")
+}
+
+// Retreat application submissions (from frontend form)
+model Retreat {
+  id        String   @id @default(uuid())
+  name      String
+  country   String?
+  phone     String?
+  email     String?
+  days      Int?
+  calling   String?
+  status    String?  @default("pending") // pending, reviewed, approved, rejected
+  notes     String?  // Admin notes
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("retreats")
+}
+
+// Retreat listings (actual retreat offerings to display)
+model RetreatListing {
+  id          String    @id @default(uuid())
+  title       String
+  description String?   @db.Text
+  location    String?
+  date        DateTime?
+  price       Decimal?  @db.Decimal(10, 2)
+  capacity    Int?
+  imageUrl    String?
+  published   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("retreat_listings")
+}
+
+// Skills (e.g., foraging, cooking, gardening)
+model Skill {
+  id        String   @id @default(uuid())
+  name      String   @unique // Skill name (e.g., "foraging")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teamMembers TeamMemberSkill[]
+
+  @@map("skills")
+}
+
+// Team members
+model TeamMember {
+  id        String   @id @default(uuid())
+  name      String
+  role      String
+  bio       String?  @db.Text
+  group     String?  // Founders, Core Team, Creative & Partners
+  photoUrl  String?
+  order     Int?     @default(0) // For sorting/display order
+  socialLinks Json?  // Store social media links as JSON
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  skills TeamMemberSkill[]
+
+  @@map("team_members")
+}
+
+// Team Member Skills (join table with skill level 1-10)
+model TeamMemberSkill {
+  id           String    @id @default(uuid())
+  teamMemberId String
+  skillId       String
+  level         Int       // Skill level from 1 to 10
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  teamMember TeamMember @relation(fields: [teamMemberId], references: [id], onDelete: Cascade)
+  skill      Skill      @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([teamMemberId, skillId]) // One skill per team member
+  @@map("team_member_skills")
+}
+
+// Accommodation listings
+model Accommodation {
+  id              String    @id @default(uuid())
+  name            String    // Property name
+  hostedBy        String?   // Host name
+  coHost          String?   // Co-host name
+  description     String?   @db.Text
+  type            String?   // room type: single, double, dorm, etc.
+  price           Decimal?  @db.Decimal(10, 2)
+  capacity        Int?
+  whatOffers      Json?     // What this place offers (parking, wifi, etc.) - can be array or object
+  amenities       String[]  // Array of amenities (for backward compatibility)
+  imageUrls       String[]  // Array of image URLs
+  houseRules      String?   @db.Text // House rules
+  location        String?   @db.Text // Location details
+  safety          String?   @db.Text // Safety information
+  url             String?   // Airbnb/booking website URL
+  available       Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  bookings Booking[]
+  reviews  AccommodationReview[]
+
+  @@map("accommodations")
+}
+
+// Accommodation Reviews (not signed in, but name required)
+model AccommodationReview {
+  id             String       @id @default(uuid())
+  accommodationId String
+  accommodation   Accommodation @relation(fields: [accommodationId], references: [id], onDelete: Cascade)
+  reviewerName   String       // Name required (not signed in)
+  reviewerEmail  String?      // Optional email
+  rating         Int?         // Rating 1-5 stars
+  comment        String?      @db.Text
+  imageUrls      String[]     // Array of review image URLs
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@map("accommodation_reviews")
+}
+
+// Accommodation bookings
+model Booking {
+  id             String       @id @default(uuid())
+  accommodationId String
+  accommodation   Accommodation @relation(fields: [accommodationId], references: [id], onDelete: Cascade)
+  guestName      String
+  guestEmail     String
+  guestPhone     String?
+  checkIn        DateTime
+  checkOut       DateTime
+  guests         Int?
+  status         String?      @default("pending") // pending, confirmed, cancelled
+  notes          String?      @db.Text
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@map("bookings")
+}
+
+// Animal profiles
+model Animal {
+  id          String    @id @default(uuid())
+  name        String
+  species     String?   // e.g., dog, cat, chicken, etc.
+  breed       String?
+  bio         String?   @db.Text
+  status      String?   @default("available") // available, adopted, etc.
+  photoUrls   String[]  // Array of photo URLs
+  healthInfo  String?   @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("animals")
+}
+
+// Media/File management
+model Media {
+  id             String   @id @default(uuid())
+  filename       String
+  originalName   String
+  mimeType       String
+  size           Int      // File size in bytes
+  url            String   // File path/URL
+  alt            String?  // Alt text for images
+  description    String?  @db.Text
+  category       String?  // Optional category for organization
+  uploadedBy     String?  // User email who uploaded
+  accommodationId String? // Link to accommodation if this is an accommodation image
+  animalId       String?  // Link to animal if this is an animal image
+  teamMemberId   String?  // Link to team member if this is a team member photo
+  blogPostId     String?  // Link to blog post if this is a blog post image
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("media")
+}
+
+// Home page content
+model HomeContent {
+  id          String   @id @default(uuid())
+  heroTitle   String?  @default("MAAYU.FARM")
+  heroTagline String?  @default("A REAL-LIFE STARDEW VALLEY")
+  heroDescription String? @db.Text
+  heroButton1Text String?
+  heroButton1Link String?
+  heroButton2Text String?
+  heroButton2Link String?
+  heroImageUrl String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  cards HomeCard[]
+
+  @@map("home_content")
+}
+
+// Home page cards
+model HomeCard {
+  id          String   @id @default(uuid())
+  homeContentId String
+  homeContent   HomeContent @relation(fields: [homeContentId], references: [id], onDelete: Cascade)
+  title       String
+  description String?  @db.Text
+  imageUrl    String?
+  link        String?
+  order       Int?     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("home_cards")
+}
+
+// Vision page content
+model VisionContent {
+  id          String   @id @default(uuid())
+  title       String?
+  content     String?  @db.Text
+  sections    Json?    // Store sections as JSON array
+  imageUrls   String[] // Array of image URLs
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("vision_content")
+}
+
+// Blog posts
+model BlogPost {
+  id            String   @id @default(uuid())
+  title         String   // Blog post title
+  slug          String   @unique // URL-friendly slug (auto-generated from title)
+  excerpt       String?  @db.Text // Short summary for preview
+  content       String   @db.Text // HTML content from rich text editor
+  featuredImage String?  // Featured image URL
+  author        String?  // Author name
+  category      String?  // Category (optional)
+  tags          String[] // Array of tags
+  published     Boolean  @default(false) // Published or draft
+  publishedAt   DateTime? // When published
+  views         Int      @default(0) // View count
+  seoTitle      String?  // SEO meta title
+  seoDescription String? @db.Text // SEO meta description
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("blog_posts")
+  @@index([slug])
+  @@index([published])
+  @@index([category])
+}
+
+// Gallery Albums
+model GalleryAlbum {
+  id            String   @id @default(uuid())
+  name          String   @unique
+  description   String?  @db.Text
+  coverImageUrl String?
+  imageCount    Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  images GalleryImage[]
+
+  @@map("gallery_albums")
+}
+
+// Gallery Images
+model GalleryImage {
+  id           String      @id @default(uuid())
+  albumId      String
+  album        GalleryAlbum @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  filename     String
+  originalName String
+  mimeType     String
+  size         Int
+  url          String
+  alt          String?     @db.Text
+  description  String?     @db.Text
+  uploadedBy  String?
+  order        Int         @default(0)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@map("gallery_images")
+  @@index([albumId])
+}
