@@ -281,11 +281,17 @@ main.vision-main{min-height:auto;padding-bottom:0;width:100%;max-width:100%}
   .home-tagline{ font-size:16px; }
   .home-description{ font-size:12px; line-height:1.7; }
   .home-button{ font-size:13px; padding:14px 22px; }
+  .home-buttons{ margin-bottom: 1.25rem; }
 
   /* Home cards (reuse volunteer styles) */
   .home-page-wrap .home-section .vol-card .vol-title{ font-size:12px; }
   .home-page-wrap .home-section .vol-card .vol-body{ font-size:10px; line-height:1.5; }
-  .home-hero-content{ padding-left:12px; padding-right:12px; margin-top:-40px; }
+  .home-hero-content{ padding-left:12px; padding-right:12px; margin-top:-28px; }
+  .home-grid{ margin-top: 1.75rem; }
+  .home-page-wrap .home-section .vol-card{ margin-top: 1.5rem; }
+  /* Ensure increased spacing wins on devices where other rules override */
+  .home-page-wrap .wrap .home-section .home-grid{ margin-top: 2rem !important; }
+  .home-page-wrap .wrap .home-section .vol-card{ margin-top: 1.75rem !important; }
 }
 
 /* Foldables/tablets and larger phones (e.g., Z Fold portrait, S8 landscape) */
@@ -293,6 +299,9 @@ main.vision-main{min-height:auto;padding-bottom:0;width:100%;max-width:100%}
   .home-title{ font-size:34px; line-height:1.2; word-break: break-word; overflow-wrap: anywhere; }
   .home-hero-content{ padding: 0 16px; max-width: 100%; }
   .home-page-wrap > .home-section{ padding-left: 12px; padding-right: 12px; }
+  .home-buttons{ margin-bottom: 1rem; }
+  .home-grid{ margin-top: 1.5rem; }
+  .home-page-wrap .home-section .vol-card{ margin-top: 1.25rem; }
 }
 
 /* Tablet/mobile boost as well (covers devices up to 768px) */
