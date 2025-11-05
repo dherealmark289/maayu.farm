@@ -74,9 +74,6 @@ export default function AccommodationDetailsClient({ initialAccommodations = [] 
               <div className="accommodation-title-card">
                 <h1 className="accommodation-details-title">Stay in Our Little World</h1>
               </div>
-              <p className="accommodation-details-description">
-                Every hut, cabin, and loft is part of the larger, story - not a resort, but a living world where you can start training with the sunrise, or learn the art of a.
-              </p>
               
               <div className="accommodation-zone-buttons">
                 {uniqueZones.length > 0 ? (
@@ -124,9 +121,6 @@ export default function AccommodationDetailsClient({ initialAccommodations = [] 
               ) : (
                 <div className="accommodation-details-main-card">
                   <div className="details-card-header">
-                    <div className="details-card-avatar">
-                      <div className="details-avatar-placeholder"></div>
-                    </div>
                     <div className="details-card-title-section">
                       <div className="details-card-main-title">Stay Among the Trees</div>
                     </div>
@@ -155,12 +149,20 @@ export default function AccommodationDetailsClient({ initialAccommodations = [] 
                           {acc.type && (
                             <div className="subsection-subtitle">{acc.type}</div>
                           )}
-                          <button 
-                            className="subsection-book-btn"
-                            onClick={() => handleBookNow(acc.url)}
-                          >
-                            BOOK NOW
-                          </button>
+                          <div className="subsection-buttons">
+                            <button 
+                              className="subsection-view-btn"
+                              onClick={() => router.push(`/accommodation/property/${acc.id || acc.name?.toLowerCase().replace(/\s+/g, '-')}`)}
+                            >
+                              VIEW NOW
+                            </button>
+                            <button 
+                              className="subsection-book-btn"
+                              onClick={() => handleBookNow(acc.url)}
+                            >
+                              BOOK NOW
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -171,6 +173,7 @@ export default function AccommodationDetailsClient({ initialAccommodations = [] 
           </div>
         </section>
       </div>
+
     </main>
   );
 }

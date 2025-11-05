@@ -11,10 +11,10 @@ const items = [
   { label: "experiences", href: "/experiences", iconUrl: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Star/3D/star_3d.png" },
   { label: "volunteers", href: "/volunteers", iconUrl: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Handshake/3D/handshake_3d.png" },
   { label: "accommodation", href: "/accommodation", iconUrl: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Hotel/3D/hotel_3d.png" },
-  { label: "animals", href: "/animals", iconUrl: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Paw%20Prints/3D/paw_prints_3d.png" },
+  { label: "animals", href: "/animals", iconUrl: "/animals.png" },
   { label: "team", href: "/team", iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f465.svg" },
   { label: "blog", href: "/blog", iconUrl: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Notebook/3D/notebook_3d.png" },
-  { label: "gallery", href: "/gallery", iconUrl: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Framed%20Picture/3D/framed_picture_3d.png" }
+  { label: "gallery", href: "/gallery", iconUrl: "/gallery.png" }
 ];
 
 export default function Page() {
@@ -28,7 +28,12 @@ export default function Page() {
             <div className="home-hero-content">
               <h1 className="home-title">MAAYU.FARM</h1>
               <p className="home-tagline">A REAL-LIFE STARDEW VALLEY</p>
-              <p className="home-description">Where community, creativity, and nature meet in Chiang Dao, Thailand</p>
+              <p className="home-description">
+                Where community, creativity, and nature meet in Chiang Dao, Thailand —
+                <a href="/volunteers" style={{ color: '#fff', textDecoration: 'underline', marginLeft: 4 }}>Volunteer</a>,
+                <a href="/experiences" style={{ color: '#fff', textDecoration: 'underline', marginLeft: 6 }}>Experience</a>, and
+                <a href="/accommodation" style={{ color: '#fff', textDecoration: 'underline', marginLeft: 6 }}>Stay</a> with us.
+              </p>
               <div className="home-buttons">
                 <a href="/retreats" className="home-button">Join a Retreat</a>
                 <a href="/vision" className="home-button">See a Farm Vision</a>

@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { useRouter } from "next/navigation";
 
 export default function AccommodationMap() {
@@ -27,7 +29,7 @@ export default function AccommodationMap() {
         <div className="accommodation-main-card">
           <div className="card-header">
             <div className="card-avatar">
-              <img src="/accomadation1.png" alt="Boutique Cabin" className="avatar-image" />
+              <Image src="/accomadation1.png" alt="Boutique Cabin" width={600} height={400} className="avatar-image" />
             </div>
             <div className="card-title-section">
               <div className="card-main-title">Boutique Cabin - Peaceful Mountain View</div>
@@ -58,7 +60,6 @@ export default function AccommodationMap() {
 
           <div className="card-buttons">
             <button className="card-button show-more-btn" onClick={handleShowMore}>Show More</button>
-            <button className="card-button airbnb-btn">View on AIRBNB</button>
           </div>
         </div>
 

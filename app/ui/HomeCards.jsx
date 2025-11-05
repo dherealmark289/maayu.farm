@@ -1,12 +1,13 @@
+import Image from "next/image";
 export default function HomeCards() {
   const cards = [
     {
       id: 1,
-      title: "Practical farming",
-      image:
-        "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1200&q=60",
+      title: "Volunteer here",
+      image: "/volunteer here.jpg",
       body:
-        "Learn to read the land, understand soil and seasons, and grow food that works with nature.",
+        "Join our community projects in farming, hospitality and building. Learn by doing and give back.",
+      href: "/volunteers",
       skills: [
         { name: "Farming", value: 8, icon: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Tractor/3D/tractor_3d.png" },
         { name: "Nature", value: 7, icon: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Evergreen%20Tree/3D/evergreen_tree_3d.png" },
@@ -21,11 +22,11 @@ export default function HomeCards() {
     },
     {
       id: 2,
-      title: "Build with nature",
-      image:
-        "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1200&q=60",
+      title: "Experience here",
+      image: "/experience here.jpg",
       body:
-        "Shape spaces with mud, bamboo and natural materials. Simple, human, and beautiful.",
+        "Workshops and day trips in natural building, crafts and local culture. Explore and create.",
+      href: "/experiences",
       skills: [
         { name: "Build", value: 10, icon: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Hammer%20and%20Wrench/3D/hammer_and_wrench_3d.png" }
       ],
@@ -37,11 +38,11 @@ export default function HomeCards() {
     },
     {
       id: 3,
-      title: "Coexist with animals",
-      image:
-        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=60",
+      title: "Stay here",
+      image: "/stay here.jpg",
       body:
-        "Care for dogs, cats and wildlife; help build habitats and revive water for butterflies and birds.",
+        "Simple stays at DAO Home and partner places around Chiang Dao. Rest close to nature.",
+      href: "/accommodation",
       skills: [
         { name: "Animal conservation", value: 5, icon: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Paw%20Prints/3D/paw_prints_3d.png" },
         { name: "Animal welfare", value: 6, icon: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Heart%20Hands/3D/heart_hands_3d.png" },
@@ -59,13 +60,13 @@ export default function HomeCards() {
     <section className="home-section">
       <div className="home-grid">
         {cards.map((c) => (
-          <div key={c.id} className="vol-card ui-sign notched-90">
+          <a key={c.id} href={c.href || "#"} className="vol-card ui-sign notched-90" style={{ textDecoration: 'none', color: 'inherit' }}>
             <div className="vol-thumb">
-              <img alt="" src={c.image} />
+              <Image alt="" src={c.image} width={1200} height={800} className="w-full h-full object-cover" />
             </div>
             <div className="vol-title">{c.title}</div>
             <div className="vol-body">{c.body}</div>
-          </div>
+          </a>
         ))}
       </div>
     </section>

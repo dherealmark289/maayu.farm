@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function VisionMap({ visionContent }) {
   const [buttonText, setButtonText] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
   // Use provided vision content or default structure
   const content = visionContent || {
     introText1: 'Mayu.Farm becomes part of something larger — a self-sustaining, living world built in rhythm with nature.',
@@ -60,6 +61,13 @@ export default function VisionMap({ visionContent }) {
     setButtonText('Coming Soon');
   };
 
+  useEffect(() => {
+    const updateIsMobile = () => setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+    updateIsMobile();
+    window.addEventListener('resize', updateIsMobile);
+    return () => window.removeEventListener('resize', updateIsMobile);
+  }, []);
+
   return (
     <div className="vision-map">
       <div className="vision-intro">
@@ -73,17 +81,20 @@ export default function VisionMap({ visionContent }) {
       </div>
 
       <div className="vision-zones">
-        {/* DAO HOME Arrow and Label */}
-        <div className="zone-label-container dao-home-label">
-          <div className="zone-label">DAO HOME</div>
-          <div className="zone-arrow">↓</div>
-        </div>
+        {/* DAO HOME and LILAC external labels/arrows - render only on desktop/tablet */}
+        {!isMobile && (
+          <>
+            <div className="zone-label-container dao-home-label">
+              <div className="zone-label">DAO HOME</div>
+              <div className="zone-arrow">↓</div>
+            </div>
 
-        {/* LILAC Arrow and Label */}
-        <div className="zone-label-container lilac-label">
-          <div className="zone-label">LILAC</div>
-          <div className="zone-arrow">↓</div>
-        </div>
+            <div className="zone-label-container lilac-label">
+              <div className="zone-label">LILAC</div>
+              <div className="zone-arrow">↓</div>
+            </div>
+          </>
+        )}
 
         {zones.map((zone, index) => (
           <div key={zone.name || index} className={`vision-zone ${zone.name || ''}`}>

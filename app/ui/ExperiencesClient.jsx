@@ -11,10 +11,10 @@ const items = [
   { label: "experiences", href: "/experiences", iconUrl: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Star/3D/star_3d.png" },
   { label: "volunteers", href: "/volunteers", iconUrl: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Handshake/3D/handshake_3d.png" },
   { label: "accommodation", href: "/accommodation", iconUrl: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Hotel/3D/hotel_3d.png" },
-  { label: "animals", href: "/animals", iconUrl: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Paw%20Prints/3D/paw_prints_3d.png" },
+  { label: "animals", href: "/animals", iconUrl: "/animals.png" },
   { label: "team", href: "/team", iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f465.svg" },
   { label: "blog", href: "/blog", iconUrl: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Notebook/3D/notebook_3d.png" },
-  { label: "gallery", href: "/gallery", iconUrl: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji/assets/Framed%20Picture/3D/framed_picture_3d.png" }
+  { label: "gallery", href: "/gallery", iconUrl: "/gallery.png" }
 ];
 
 const defaultCategories = ["All", "Wellness", "Adventure", "Recovery", "Farm Life", "Craft & Build"];
@@ -44,6 +44,7 @@ export default function ExperiencesClient({ initialExperiences, initialCategorie
   const filteredExperiences = activeCategory === "All" 
     ? initialExperiences 
     : initialExperiences.filter(exp => exp.category === activeCategory);
+
 
   return (
     <main>
@@ -87,9 +88,6 @@ export default function ExperiencesClient({ initialExperiences, initialCategorie
           {/* Experience Cards - Horizontal Scrollable */}
           {initialExperiences && initialExperiences.length > 0 && (
             <div className="experiences-cards-container">
-              <button className="experiences-scroll-arrow experiences-scroll-arrow-left" onClick={scrollLeft}>
-                ‹
-              </button>
               <div className="experiences-cards-scroll" ref={scrollContainerRef}>
                 {filteredExperiences.length === 0 ? (
                   <div className="text-center py-12 w-full">
@@ -136,7 +134,7 @@ export default function ExperiencesClient({ initialExperiences, initialCategorie
                         <div className="experience-card-included">
                           <div className="experience-card-included-header">
                             <span className="experience-card-included-icon">🌱</span>
-                            <span>What's included</span>
+                            <span>What&apos;s included</span>
                           </div>
                           <ul className="experience-card-included-list">
                             {experience.includes.map((item, idx) => (
@@ -168,9 +166,6 @@ export default function ExperiencesClient({ initialExperiences, initialCategorie
                   ))
                 )}
               </div>
-              <button className="experiences-scroll-arrow experiences-scroll-arrow-right" onClick={scrollRight}>
-                ›
-              </button>
             </div>
           )}
 

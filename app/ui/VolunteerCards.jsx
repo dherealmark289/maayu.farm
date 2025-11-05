@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 const slides = [
   {
     id: 1,
@@ -7,7 +9,7 @@ const slides = [
     body:
       "Forget blueprints. Forget concrete. Discover how simple — and human — it is to build with your hands. Work with mud, bamboo, and natural materials to shape spaces that breathe. Unlearn what the system taught you — and rediscover what it means to build the home of your dreams",
     labels: ["Mud house building", "Mosaic design", "Wood Painting"],
-    image: "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1200&q=60",
+    image: "/build.jpg",
   },
   {
     id: 2,
@@ -15,7 +17,7 @@ const slides = [
     body:
       "You’ll learn with us how to read the land — to understand soil, seasons, and planting cycles. Together, we’ll explore how to grow food that works with nature, not against it. Rebuild a thriving ecosystem, and create a small forest for foraging throughout the year.",
     labels: ["Permaculture design", "Regenerative farming", "Foraging"],
-    image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1200&q=60",
+    image: "/farm.jpg",
   },
   {
     id: 3,
@@ -23,7 +25,7 @@ const slides = [
     body:
       "Learn to care for life beyond your own. Build a tortoise sanctuary, care for our lovely dogs and cats, and help us revive an old pond to attract butterflies and birds. Coexisting — not controlling — animals is how we.",
     labels: ["Animal Care & Training", "Tortoise Sanctuary Build", "Butterflies & Bees"],
-    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=60",
+    image: "/coexist.jpg",
   },
 ];
 
@@ -78,7 +80,7 @@ export default function VolunteerCards() {
             <div key={s.id} className="vol-card ui-sign notched-90">
               {s.image ? (
                 <div className="vol-thumb">
-                  <img alt="" src={s.image} />
+                  <Image alt="" src={s.image} width={1200} height={800} className="w-full h-full object-cover" />
                 </div>
               ) : null}
               <div className="vol-title">{s.title}</div>
